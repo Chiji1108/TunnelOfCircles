@@ -6,21 +6,40 @@
 //
 
 import SwiftUI
-import RealityKit
-import RealityKitContent
 
 struct ContentView: View {
-    var body: some View {
-        VStack {
-            Model3D(named: "Scene", bundle: realityKitContentBundle)
-                .padding(.bottom, 50)
+  @State private var colors: [Color] = [.cyan, .blue]
 
-            Text("Hello, world!")
+  let minDiameter = 50.0
+  let diameterChange = 70.0
+
+  var body: some View {
+    VStack {
+      ZStack {
+        ForEach(0..<4) { index in
+          Circle()
+            .stroke(lineWidth: 30)
+            .foregroundStyle(colors[index % 2])
+            .frame(height: minDiameter + diameterChange * Double(index))
         }
-        .padding()
+      }
+
+      Grid {
+        GridRow {
+          Text("Colors")
+          HStack {
+            ColorPicker("Colors", selection: $colors[0])
+            ColorPicker("Colors", selection: $colors[1])
+            Spacer()
+          }
+          .labelsHidden()
+        }
+      }
     }
+    .padding()
+  }
 }
 
 #Preview(windowStyle: .automatic) {
-    ContentView()
+  ContentView()
 }
